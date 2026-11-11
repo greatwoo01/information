@@ -87,47 +87,18 @@ export default function WeatherWidget() {
       setLoading(true);
       setError(null);
 
-      // 获取用户位置
-      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          timeout: 10000,
-          enableHighAccuracy: false,
-        });
-      });
-
-      const { latitude, longitude } = position.coords;
-
-      // 并行获取天气数据和城市名称
-      const [weatherResponse, geoResponse] = await Promise.all([
-        fetch(`/api/weather?lat=${latitude}&lon=${longitude}`),
-        fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=zh`)
-      ]);
-
-      if (!weatherResponse.ok) {
+      // 服务端根据访客IP定位并返回天气和城市名称
+      const response = await fetch('/api/weather', { cache: 'no-store' });
+      if (!response.ok) {
         throw new Error('获取天气数据失败');
       }
 
-      const weatherData = await weatherResponse.json();
-      
-      // 获取城市名称
-      let locationName = '当前地区';
-      if (geoResponse.ok) {
-        const geoData = await geoResponse.json();
-        locationName = geoData.city || 
-                      geoData.locality || 
-                      geoData.principalSubdivision ||
-                      geoData.countryName ||
-                      '当前地区';
-      }
-
-      setWeatherData({
-        ...weatherData,
-        location: locationName
-      });
+      const data: WeatherData = await response.json();
+      setWeatherData(data);
       setLastUpdated(new Date());
     } catch (err) {
       console.error('获取天气失败:', err);
-      setError('无法获取天气信息，请确保已授权位置访问');
+      setError('无法获取天气信息，请稍后重试');
     } finally {
       setLoading(false);
     }

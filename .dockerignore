@@ -1,0 +1,16 @@
+.git
+.gitignore
+node_modules
+.next
+dist
+.env
+.env.*
+*.log
+*.tsbuildinfo
+.DS_Store
+.vscode
+.idea
+.preview
+.coze-logs
+.cozeproj
+.codegraph

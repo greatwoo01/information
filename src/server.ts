@@ -13,6 +13,9 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
   const server = createServer(async (req, res) => {
     try {
+      if (!req.headers['x-forwarded-for'] && !req.headers['x-real-ip']) {
+        req.headers['x-real-ip'] = req.socket.remoteAddress;
+      }
       const parsedUrl = parse(req.url!, true);
       await handle(req, res, parsedUrl);
     } catch (err) {
