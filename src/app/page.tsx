@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import DateTimeDisplay from '@/components/DateTimeDisplay';
 import WeatherWidget from '@/components/WeatherWidget';
 import CountdownTimer from '@/components/CountdownTimer';
+import PerpetualCalendar from '@/components/PerpetualCalendar';
 
 export const metadata: Metadata = {
-  title: '信息综合面板 - 日期时间、天气与倒计时',
-  description: '包含当前日期时间、天气预报和倒计时功能的综合信息页面',
+  title: '信息综合面板 - 日期时间、天气、万年历与倒计时',
+  description: '包含当前日期时间、天气预报、公历农历万年历和倒计时功能的综合信息页面',
 };
 
 export default function Home() {
@@ -18,7 +19,7 @@ export default function Home() {
             信息综合面板
           </h1>
           <p className="text-muted-foreground">
-            日期时间 · 天气预报 · 番茄计时器
+            日期时间 · 天气预报 · 万年历 · 番茄计时器
           </p>
         </div>
 
@@ -36,6 +37,11 @@ export default function Home() {
           {/* 右侧列 - 天气（合并卡片） */}
           <div className="lg:row-span-2">
             <WeatherWidget />
+          </div>
+
+          {/* 底部：万年历 */}
+          <div className="lg:col-span-2">
+            <PerpetualCalendar />
           </div>
         </div>
 
